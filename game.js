@@ -4,16 +4,23 @@ const resultDiv = document.getElementById("result");
 const hitDiv = document.getElementById("hit");
 const standDiv = document.getElementById("stand");
 const yourMoveDiv = document.getElementById("hit-or-stand");
+const yourCardsDiv = document.getElementById("your-cards");
+const firstCardDiv = document.getElementById("first-card");
+const secondCardDiv = document.getElementById("second-card");
+let thisRound = cards;
 
-
-function dealCards() {
-  const randomNumber = Math.floor(Math.random() * 52);
-  return cards[randomNumber];
+function dealCards(arr) {
+  const randomNumber = Math.floor(Math.random() * arr.length);
+  return arr[randomNumber];
 }
 
 function deal() {
-  const card = dealCards();
-  console.log(card);
+  const card = dealCards(thisRound);
+  thisRound = thisRound.filter(noRepeat);
+  function noRepeat(test) {
+    return test !== card;
+  }
+  showCards(card);
   switch (card) {
     case "h2": case "s2": case "d2": case "c2":
       yourScore += 2;
@@ -77,6 +84,8 @@ $(document).ready(function() {
 $('#deal').one('click', function() {
   deal();
   deal();
+  yourCardsDiv.classList.remove('d-none');
+  yourCardsDiv.classList.add('d-flex');
   if (yourScore == 21) {
     window.alert("Your score is " + yourScore + ". It's a black jack!");
     location.reload();
@@ -102,4 +111,17 @@ $(document).ready(function() {
     })
   })
 
-console.log(yourScore);
+  function showCards(card) {
+    if (card.includes('h') == true) {
+      firstCardDiv.innerHTML += " ❤️" + card[1];
+    }
+    else if (card.includes('s') == true) {
+      firstCardDiv.innerHTML += " ♠️" + card[1];
+    }
+    else if (card.includes('d') == true) {
+      firstCardDiv.innerHTML += " ♦️" + card[1];
+    }
+    else if (card.includes('c') == true) {
+      firstCardDiv.innerHTML += " ♣️" + card[1];
+    }
+    }
