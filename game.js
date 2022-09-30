@@ -1,7 +1,9 @@
 const cards = ['hA', 'sA', 'dA', 'cA', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7', 'h8', 'h9', 'h10', 's2', 's3', 's4', 's5', 's6', 's7', 's8', 's9', 's10', 'd2', 'd3', 'd4', 'd5', 'd6', 'd7', 'd8', 'd9', 'd10', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10', 'hJ', 'hQ', 'hK', 'sJ', 'sQ', 'sK', 'dJ', 'dQ', 'dK', 'cJ', 'cQ', 'cK'];
 let yourScore = 0;
-const dealDiv = document.getElementById("deal");
 const resultDiv = document.getElementById("result");
+const hitDiv = document.getElementById("hit");
+const standDiv = document.getElementById("stand");
+const yourMoveDiv = document.getElementById("hit-or-stand");
 
 
 function dealCards() {
@@ -51,14 +53,53 @@ function deal() {
   }
 }
 
-function main() {
-  dealDiv.addEventListener('click', function() {
-    console.log("you clicked");
+function closeTab() {
+  close();
+  close();
+}
+
+function hit() {
+  deal();
+  if (yourScore > 21) {
+    window.alert("Your score is " + yourScore + ". You Lose!");
+    location.reload();
+  } 
+  else if (yourScore == 21) {
+    window.alert("Your score is " + yourScore + ". You Win!");
+    location.reload();
+  }
+  else {
+    resultDiv.innerHTML = `Your score is ${yourScore}. Hit or Stand?`;
+  }
+}
+
+$(document).ready(function() {
+$('#deal').one('click', function() {
+  deal();
+  deal();
+  if (yourScore == 21) {
+    window.alert("Your score is " + yourScore + ". It's a black jack!");
+    location.reload();
+  }
+  else {
+  resultDiv.innerHTML = `Your score is ${yourScore}. Hit or Stand?`;
+  yourMoveDiv.classList.remove('d-none');
+  yourMoveDiv.classList.add('d-flex');
+      }
+    })
   })
-} 
-//cant get the DEAL button to work. 
-//when it works (deals twice on click) --> show result in the result div, ask to hold/hit, deal once more if hit, calculate yourScore
-//add you lose/you win alerts. simple ver done
+
+$(document).ready(function() {
+  $('#stand').on('click', function() {
+    window.alert("You Lose!");
+    location.reload();
+    })
+  })
+
+$(document).ready(function() {
+  $('#hit').on('click', function() {
+    hit();
+    })
+  })
 
 console.log(yourScore);
-main()
